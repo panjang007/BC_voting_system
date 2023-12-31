@@ -12,5 +12,6 @@ Future<DeployedContract> loadContract() async {
   return contract;
 }
 
+// kena sambung part buat function untuk panggil function dalam smart contract
 
 // Dalam Video minit yang ke 40; 
