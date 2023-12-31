@@ -9,9 +9,22 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            elevation: 0,
+          ),
+          primaryColor: Colors.blue,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          ))),
       home: Scaffold(
-        body: Center(
+        appBar: AppBar(
+          title: const Text("IIUM Voting Apps"),
+        ),
+        body: const Center(
           child: Text('Hello World!'),
         ),
       ),
