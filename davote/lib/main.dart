@@ -1,3 +1,4 @@
+import 'package:davote/pages/homepage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,14 +21,7 @@ class MainApp extends StatelessWidget {
               style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
           ))),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("DaVote"),
-        ),
-        body: const Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+      home: Homepage(),
     );
   }
 }
