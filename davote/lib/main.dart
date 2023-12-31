@@ -22,7 +22,7 @@ class MainApp extends StatelessWidget {
           ))),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("IIUM Voting Apps"),
+          title: const Text("DaVote"),
         ),
         body: const Center(
           child: Text('Hello World!'),
