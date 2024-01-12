@@ -1,6 +1,6 @@
 import 'package:davote/utils/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:http/src/client.dart';
+import 'package:http/http.dart' as http; // Import the correct Client class
 import 'package:web3dart/web3dart.dart';
 
 class Homepage extends StatefulWidget {
@@ -11,13 +11,13 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  Client? httpClient;
+  http.Client? httpClient; // Use http.Client for clarity
   Web3Client? ethClient;
 
   @override
   void initState() {
-    httpClient = Client as Client?;
-    ethClient = Web3Client(Infura_Url, httpClient as Client);
+    httpClient = http.Client(); // Create a new HTTP client instance
+    ethClient = Web3Client(Infura_Url, httpClient!);
 
     super.initState();
   }
