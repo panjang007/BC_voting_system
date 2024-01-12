@@ -1,4 +1,5 @@
 import 'package:davote/pages/homepage.dart';
+import 'package:davote/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MainApp extends StatelessWidget {
           primaryColor: Colors.blue,
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            backgroundColor: MaterialStateProperty.all<Color>(terquoise),
           ))),
       home: Homepage(),
     );
