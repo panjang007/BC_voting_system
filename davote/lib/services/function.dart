@@ -1,77 +1,62 @@
 import 'package:davote/utils/constant.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:web3dart/web3dart.dart';
 
-String? privateKey;
-int candidateID = 0;
-List<int> votesPerCandidate = [1, 2, 3];
-
 Future<DeployedContract> loadContract() async {
   String abi = await rootBundle.loadString('assets/abi.json');
-  String contractAddress = myContractAddress;
-
+  String contractAddress =
+      contractAddress1; // Replace with actual contract address
   final contract = DeployedContract(ContractAbi.fromJson(abi, 'VotingSystem'),
       EthereumAddress.fromHex(contractAddress));
-
   return contract;
 }
 
-Future<String> callFunction(String functionName, List<dynamic> args,
+Future<String> callFunction(String funcname, List<dynamic> args,
     Web3Client ethClient, String privateKey) async {
   EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
-  privateKey = credentials as String;
   DeployedContract contract = await loadContract();
-  final ethFunction = contract.function(functionName);
+  final ethFunction = contract.function(funcname);
   final result = await ethClient.sendTransaction(
       credentials,
       Transaction.callContract(
-          contract: contract, function: ethFunction, parameters: args));
+        contract: contract,
+        function: ethFunction,
+        parameters: args,
+      ),
+      chainId: null,
+      fetchChainIdFromNetworkId: true);
   return result;
 }
 
-Future<String> checkValidVoter(String address, Web3Client ethClient) async {
+Future<bool> isValidVoter(String address, Web3Client ethClient) async {
+  List<dynamic> result =
+      await ask('isValidVoter', [EthereumAddress.fromHex(address)], ethClient);
+  return result[0] as bool;
+}
+
+Future<String> getCandidateName(int candidateID, Web3Client ethClient) async {
+  List<dynamic> result =
+      await ask('getCandidateName', [BigInt.from(candidateID)], ethClient);
+  return result[0] as String;
+}
+
+Future<String> castVote(
+    int candidateID, Web3Client ethClient, String privateKey) async {
   var response = await callFunction(
-      'isValidVoter', [address], ethClient, privateKey as String);
-
+      'castVote', [BigInt.from(candidateID)], ethClient, privateKey);
   return response;
 }
 
-Future<String> getCandidateName(String address, Web3Client ethClient) async {
-  var response = await callFunction(
-      'isValidVoter', [address], ethClient, privateKey as String);
-  return response;
+Future<Map<String, dynamic>> getWinner(Web3Client ethClient) async {
+  List<dynamic> result = await ask('getWinner', [], ethClient);
+  return {'winnerID': result[0], 'winnerName': result[1]};
 }
 
-Future<String> castVote(String address, Web3Client ethClient) async {
-  var response = await callFunction(
-      'isValidVoter', [address], ethClient, privateKey as String);
-  return response;
+Future<List<dynamic>> ask(
+    String funcName, List<dynamic> args, Web3Client ethClient) async {
+  DeployedContract contract = await loadContract();
+  final ethFunction = contract.function(funcName);
+  final result =
+      ethClient.call(contract: contract, function: ethFunction, params: args);
+  return result;
 }
-
-Future<String> getWinner(String address, Web3Client ethClient) async {
-  int? winningVoteCount;
-  int? winningCandidateID;
-  var response = await callFunction('isValidVoter',
-      [winningVoteCount, winningCandidateID], ethClient, privateKey as String);
-
-  for (candidateID = 0; candidateID <= winningCandidateID!; candidateID++) {
-    if (votesPerCandidate[candidateID] > winningCandidateID) {
-      winningVoteCount = votesPerCandidate[candidateID];
-      winningCandidateID = candidateID;
-    }
-  }
-
-  return response;
-}
-
-
-
-
-
-
-
-
-// kena sambung part buat function untuk panggil function dalam smart contract
-
-// Dalam Video minit yang ke 40; 
